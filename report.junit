@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites name='Contentstack iOS Tests.xctest' tests='220' failures='0'>
+  <testsuite name='Contentstack_iOS_Tests.AssetQueryAPITest' tests='15' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test01FindAll_AssetQuery' time='1.939'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test02Find_AssetQuery_whereUIDEquals' time='0.018'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test03Find_AssetQuery_whereFileNameEquals' time='0.022'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test03Find_AssetQuery_whereTitleDNotEquals' time='0.020'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test04Find_AssetQuery_whereFileNameexists' time='0.020'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test05Find_AssetQuery_whereTitleMatchRegex' time='0.015'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test06Fetch_Asset_fromUID' time='0.012'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test07Fetch_AssetQuery_WithDimentsions' time='0.023'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test08Fetch_Asset_WithGlobalFields' time='0.012'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test09Fetch_AssetQuery_WithCount' time='0.019'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test11Fetch_Asset_WithWrongUID_shouldFail' time='0.191'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test12Fetch_AssetQuery_WithoutFallback_Result' time='0.022'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test13Fetch_AssetQuery_Fallback_Result' time='0.032'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test14Fetch_Asset_UIDWithoutFallback_NoResult' time='0.174'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryAPITest' name='test15Fetch_Asset_UIDWithFallback_NoResult' time='0.025'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.AssetQueryTest' tests='8' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryTest' name='testAssetQuery_addQueryParam' time='0.004'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryTest' name='testAssetQuery_addURIParam' time='0.003'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryTest' name='testAssetQuery_addValue' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryTest' name='testAssetQuery_Include' time='0.003'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryTest' name='testAssetQuery_Locale' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryTest' name='testAssetQuery_Order' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryTest' name='testAssetQuery_SkipLimit' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetQueryTest' name='testAssetQuery_whereCondition' time='0.008'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.AssetTest' tests='6' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.AssetTest' name='testAsset_addValue' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetTest' name='testAssetInclude' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetTest' name='testAssetQuery_Locale' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetTest' name='testAssetQuery_withoutUID' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetTest' name='testAssetQuery_withUID' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.AssetTest' name='testEndPoint' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' tests='14' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test01FindAll_AssetQuery' time='0.632'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test02Find_AssetQuery_whereUIDEquals' time='0.014'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test03Find_AssetQuery_whereTitleDNotEquals' time='0.018'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test04Find_AssetQuery_whereFileNameexists' time='0.017'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test05Find_AssetQuery_whereTitleMatchRegex' time='0.013'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test06Fetch_Asset_fromUID' time='0.015'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test07Fetch_AssetQuery_WithDimensions' time='0.019'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test08Fetch_Asset_WithGlobalFields' time='0.026'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test09Fetch_AssetQuery_WithCount' time='0.017'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test10Fetch_Asset_WithWrongUID_shouldFail' time='0.178'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test11Fetch_AssetQuery_WithoutFallback_Result' time='0.021'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test12Fetch_AssetQuery_Fallback_Result' time='0.040'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test13Fetch_Asset_UIDWithoutFallback_NoResult' time='0.176'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncAssetQueryAPITest2' name='test14Fetch_Asset_UIDWithFallback_NoResult' time='0.020'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' tests='10' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' name='test01FindAll_ContentTypeQuery' time='0.060'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' name='test02Find_ContentTypeQuery_whereUIDEquals' time='0.014'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' name='test03Find_ContentTypeQuery_whereTitleDNotEquals' time='0.036'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' name='test04Find_ContentTypeQuery_whereDescriptionexists' time='0.031'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' name='test05Find_ContentTypeQuery_whereTitleMatchRegex' time='0.013'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' name='test06Fetch_ContentType_fromUID' time='0.012'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' name='test07Fetch_ContentTypeQuery_WithGlobalFields' time='0.032'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' name='test08Fetch_ContentType_WithGlobalFields' time='0.012'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' name='test09Fetch_ContentTypeQuery_WithCount' time='0.033'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2' name='test10Fetch_ContentType_WithWrongUID_shouldFail' time='0.169'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.AsyncEntryAPITest2' tests='32' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test01FindAll_EntryQuery' time='0.081'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test02Find_EntryQuery_whereUIDEquals' time='0.020'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test03Find_EntryQuery_whereTitleDNotEquals' time='0.070'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test04Find_EntryQuery_whereTitleexists' time='0.050'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test05Find_EntryQuery_whereTitleMatchRegex' time='0.024'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test06Fetch_Entry_fromUID' time='0.012'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test07Fetch_EntryQuery_WithIncludeContentType' time='0.048'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test08Fetch_Entry_WithGlobalFields' time='0.016'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test09Fetch_EntryQuery_WithCount' time='0.051'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test10Fetch_Entry_WithIncludeContentType' time='0.015'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test11Fetch_Entry_WithWrongUID_shouldFail' time='0.172'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test12Fetch_EntryQuery_WithGlobalFields' time='0.101'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test13Find_EntryQuery_whereTitleIncludes' time='0.014'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test14Find_EntryQuery_whereTitleExclude' time='0.048'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test15Find_EntryQuery_wherelessThan' time='0.055'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test19Find_EntryQuery_OrderBySessionTime' time='0.105'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test20Find_EntryQuery_AndOrOperator' time='0.115'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test21Find_EntryQuery_SkipLimit' time='0.057'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test22Find_EntryQuery_AddQuery' time='0.050'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test23Find_EntryQuery_AddParam' time='0.092'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test24Find_EntryQuery_IncludeOnlyFields' time='0.020'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test25Find_EntryQuery_ExcludeFields' time='0.049'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test26Find_EntryQuery_IncludeReference' time='0.057'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test27Fetch_Entry_IncludeReference' time='0.020'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test28Find_EntryQuery_IncludeReferenceOnly' time='0.047'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test29Fetch_Entry_IncludeReferenceOnly' time='0.013'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test30Find_EntryQuery_IncludeReferenceExceot' time='0.051'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test31Fetch_Entry_IncludeReferenceExcept' time='0.015'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test32Fetch_EntryQuery_WithoutFallback_Result' time='0.010'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test33Fetch_EntryQuery_Fallback_Result' time='0.046'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test34Fetch_Entry_UIDWithoutFallback_NoResult' time='0.184'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncEntryAPITest2' name='test35Fetch_Entry_UIDWithFallback_NoResult' time='0.021'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.AsyncQueryOnAPITest2' tests='2' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.AsyncQueryOnAPITest2' name='test01FindAll_Session' time='0.075'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncQueryOnAPITest2' name='test02FindAll_SessionReference' time='0.015'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.AsyncSyncAPITest2' tests='8' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.AsyncSyncAPITest2' name='test01SyncInit' time='0.123'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncSyncAPITest2' name='test02SyncToken' time='0.011'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncSyncAPITest2' name='test03SyncPagination' time='0.025'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncSyncAPITest2' name='test04SyncAssetPublished' time='0.016'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncSyncAPITest2' name='test05SyncForContentType' time='0.032'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncSyncAPITest2' name='test06SyncLocale' time='0.011'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncSyncAPITest2' name='test07SyncFromStartDate' time='0.015'/>
+    <testcase classname='Contentstack_iOS_Tests.AsyncSyncAPITest2' name='test08SyncContentTypeAndLocale' time='0.032'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.ContentStackLogTest' tests='2' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.ContentStackLogTest' name='testContentstackLogsLevels' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentStackLogTest' name='testContentstackPrint' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.ContentTypeQueryAPITest' tests='10' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryAPITest' name='test01FindAll_ContentTypeQuery' time='0.075'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryAPITest' name='test02Find_ContentTypeQuery_whereUIDEquals' time='0.012'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryAPITest' name='test03Find_ContentTypeQuery_whereTitleDNotEquals' time='0.025'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryAPITest' name='test04Find_ContentTypeQuery_whereDescriptionexists' time='0.040'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryAPITest' name='test05Find_ContentTypeQuery_whereTitleMatchRegex' time='0.015'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryAPITest' name='test06Fetch_ContentType_fromUID' time='0.012'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryAPITest' name='test07Fetch_ContentTypeQuery_WithGlobalFields' time='0.031'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryAPITest' name='test08Fetch_ContentType_WithGlobalFields' time='0.012'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryAPITest' name='test09Fetch_ContentTypeQuery_WithCount' time='0.030'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryAPITest' name='test11Fetch_ContentType_WithWrongUID_shouldFail' time='0.164'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.ContentTypeQueryTest' tests='7' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryTest' name='testAssetQuery_addValue' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryTest' name='testCTQuery_addQueryParam' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryTest' name='testCTQuery_addURIParam' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryTest' name='testCTQuery_Include' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryTest' name='testCTQuery_Order' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryTest' name='testCTQuery_SkipLimit' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeQueryTest' name='testCTQuery_whereCondition' time='0.006'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.ContentTypeTests' tests='7' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeTests' name='testContentTyp_addValue' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeTests' name='testContentTypeQuery' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeTests' name='testContentTypeQuery_withContentTypeUID' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeTests' name='testEndPoint' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeTests' name='testEntry_ContentTypeUidNotProvided_FatalError' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeTests' name='testEntry_UidNotProvided_ShouldReturnEntry' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentTypeTests' name='testEntry_UidProvided_ShouldReturnEntryWithUID' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.ContentstackConfigTest' tests='3' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.ContentstackConfigTest' name='testTimeZone_changetoCurrent' time='0.010'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentstackConfigTest' name='testUserAgent' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentstackConfigTest' name='testXUserAgent' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.ContentstackTests' tests='7' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.ContentstackTests' name='testStack_AZURE_NAHostRegion_ReturnStackWithEUValue' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentstackTests' name='testStack_Branch_ReturnStackWithBranch' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentstackTests' name='testStack_DecodingStrategy_tobesetToJsonDecoder' time='0.005'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentstackTests' name='testStack_DefaultHostRegion_ReturnStackWithDefaultValue' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentstackTests' name='testStack_EUHostRegion_ReturnStackWithEUValue' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentstackTests' name='testStack_NewHost_ReturnStackWithNewHost' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ContentstackTests' name='testStackToken_RequireFieldProvided_ReturnStack' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.DateTest' tests='2' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.DateTest' name='testDateFormatter_withMultipleDateFormat' time='0.007'/>
+    <testcase classname='Contentstack_iOS_Tests.DateTest' name='testDatefromString_ReturnDate' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.EntryQueriableTest' tests='6' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.EntryQueriableTest' name='testCTQuery_Include' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryQueriableTest' name='testQuery_IncludeReference' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryQueriableTest' name='testQuery_includeReferenceFieldBoth' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryQueriableTest' name='testQuery_includeReferenceFieldExcept' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryQueriableTest' name='testQuery_includeReferenceFieldOnly' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryQueriableTest' name='testQuery_OnlyAndExcept' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.EntryTest' tests='9' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.EntryTest' name='testContentTyp_addValue' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryTest' name='testEntry_EndPoint' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryTest' name='testEntryLocale' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryTest' name='testEntryQuery_ContentTypeUidNotProvided_FatalError' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryTest' name='testEntryQuery_withoutUID' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryTest' name='testEntryQuery_withUID' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryTest' name='testEntryQueryType_withoutUID' time='0.002'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryTest' name='testEntryQueryType_withUID' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.EntryTest' name='testEntryQueryTyped_ContentTypeUidNotProvided_FatalError' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.ImageTransformEquatableTest' tests='5' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformEquatableTest' name='testImageTransform_Equatable' time='0.004'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformEquatableTest' name='testImageTransform_Equatables' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformEquatableTest' name='testResizeFilter' time='0.004'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformEquatableTest' name='testSharpen_invalidParams_shouldThrowError' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformEquatableTest' name='testSharpen_validParameter' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.ImageTransformTest' tests='16' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testAuto' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testCrop_Offset_withoutMode' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testCrop_Region_withoutMode' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testCropAspectRatio_withoutMode' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testCropCanvas_Offset' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testCropCanvas_Region' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testCropCanvasAspectRatio_AllValues' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testCropCanvasAspectRatio_NoSizeSpecified_Throws' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testCropCanvasDefault_ReturnURL' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testFit' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testFormat_ReturnURL' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testOrient' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testQualiity_InRange_ReturnURL' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testQualiity_OutofRange_ThrowsError' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testResize_ReturnURL' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTest' name='testTrim' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.ImageTransformTestAdditional' tests='20' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testBackgroundColor_URLQueryParam' time='0.003'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testBackgroundColorHex_withInvalidValues_shouldThrowError' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testBackgroundColorRGB_withInvalidValues_shouldThrowError' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testBackgroundColorRGBA_withInvalidValues_shouldThrowError' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testBlur_InvalidParam_shouldThrow' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testBlur_validParam' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testBrightness_InvalidParam_shouldThrow' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testBrightness_validParam' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testContrast_InvalidParam_shouldThrow' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testContrast_validParam' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testDPR_InvalidParam_shouldThrow' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testDPR_validParam' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testFetchFirstFrame' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testOverlay' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testOverlayAlign' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testOverlayPadding' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testOverlayRepeat' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testPadding' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testSaturation_InvalidParam_shouldThrow' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.ImageTransformTestAdditional' name='testSaturation_validParam' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.QueryEntryType' tests='2' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.QueryEntryType' name='testCTQuery_whereCondition' time='0.006'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryEntryType' name='testQuery_OrderBy' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.QueryTest' tests='16' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testAssetQuery_addValue' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testCTQuery_addQueryParam' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testCTQuery_addURIParam' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testCTQuery_Include' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testCTQuery_Order' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testCTQuery_SkipLimit' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testCTQuery_whereCondition' time='0.007'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testQuery_andOrOperator' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testQuery_IncludeReference' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testQuery_includeReferenceFieldBoth' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testQuery_includeReferenceFieldExcept' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testQuery_includeReferenceFieldOnly' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testQuery_OnlyAndExcept' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testQuery_OrderBy' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testQuery_ReferenceSearch' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.QueryTest' name='testQuery_seachTag' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.StackTests' tests='4' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.StackTests' name='testAsset_UIDNotProvided_UIDShouldbeNil' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.StackTests' name='testAsset_UIDProvided_UIDShouldPresent' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.StackTests' name='testContentType_UIDNotProvided_UIDShouldbeNil' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.StackTests' name='testContentType_UIDProvided_UIDShouldPresent' time='0.001'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.SyncTest' tests='2' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.SyncTest' name='testSync_BothTokens_ShouldGetFatalError' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.SyncTest' name='testSyncableTypes_Parameter' time='0.002'/>
+  </testsuite>
+  <testsuite name='Contentstack_iOS_Tests.UtilsTest' tests='7' failures='0'>
+    <testcase classname='Contentstack_iOS_Tests.UtilsTest' name='testArray_toString' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.UtilsTest' name='testDictionary_QueryParams_toString' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.UtilsTest' name='testStringToURL_InvalidURL_throws' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.UtilsTest' name='testStringToURL_URL_ReturnURL' time='0.000'/>
+    <testcase classname='Contentstack_iOS_Tests.UtilsTest' name='testStringURL_BlankTransform_ReturnURL' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.UtilsTest' name='testStringURL_SameTransform_ReturnURL' time='0.001'/>
+    <testcase classname='Contentstack_iOS_Tests.UtilsTest' name='testStringURL_SameTwoTransform_Throws' time='0.001'/>
+  </testsuite>
+</testsuites>

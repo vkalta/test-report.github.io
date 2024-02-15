@@ -1,0 +1,2846 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Test Results | xcpretty</title>
+    <style type="text/css">
+      body { font-family:Avenir Next, Helvetica Neue, sans-serif; color: #4A4A4A; background-color: #F0F3FB; margin:0;}
+      h1 { font-weight: normal; font-size: 24px; margin: 10px 0 0 0;}
+      h3 { font-weight: normal; margin: 2px; font-size: 1.1em;}
+      header { position: fixed;width: 100%;background: rgba(249, 254, 255, 0.9);margin: 0;padding: 10px;}
+      header:before, header:after { content:""; display:table;}
+      header:after { clear:both;}
+      a:link { color: #A1D761;}
+      footer { clear: both;position: relative;z-index: 10;height: 40px;margin-top: -10px; margin-left:30px; font-size:12px;}
+      table { width:100%; border-collapse: collapse;}
+      tr td:first-child { width:7%}
+      .left { float: left; margin-left:30px;}
+      .right { float: right; margin-right: 40px; margin-top: 0; margin-bottom:0;}
+      .test-suite { margin: 0 0 30px 0;}
+      .test-suite > .heading { font-family:Menlo, Monaco, monospace; font-weight: bold; border-color: #A1D761; background-color: #B8E986; border-width: 1px;}
+      .test-suite.failing > .heading { border-color: #C84F5E; background-color: #E58591;}
+      .test-suite > .heading > .title { margin-top: 4px; margin-left: 10px;}
+      .tests { overflow: scroll;margin: 0 30px 0 60px;}
+      .test, .test-suite > .heading { height: 30px; overflow: hidden; margin: 0 30px;}
+      .test, .test-suite > .heading { border-width: 1px; border-collapse: collapse; border-style: solid; }
+      .test { margin-left: 30px; border-top:none;}
+      .test.failing { border-color: #C84F5E; background-color: #F4DDE0;}
+      .test.passing { border-color: #A1D761;}
+      .test.failing { background-color: #E7A1AA;}
+      .test.passing { background-color: #CAF59F;}
+      .test.failing.odd { background-color: #EEC7CC;}
+      .test.passing.odd { background-color: #E5FBCF;}
+      .details.failing { background-color: #F4DDE0; border: 1px solid #C84F5E;}
+      .details.passing { background-color: #E5F4DC; border: 1px solid #A1D761;}
+      .test .test-detail:last-child { padding-bottom: 8px;}
+      .test .title { float: left; font-size: 0.9em; margin-top: 8px; font-family: Menlo, Monaco, monospace;}
+      .test .time { float: left;margin: 4px 10px 0 20px;}
+      .test-detail { font-family:Menlo, Monaco, monospace; font-size: 0.9em; margin: 5px 0 5px 0px;}
+      .screenshots { height: auto; overflow: hidden; padding: 4px 4px 0 4px; background-color: #B8E986; border: #A1D761; border-width: 0 1px; border-style: solid; }
+      .screenshots.failing { border-color: #C84F5E; background-color: #E58591; }
+      .screenshot { max-height: 60px; float: left; transition: max-height 0.2s; margin: 0 4px 4px 0 }
+      .screenshot.selected { max-height: 568px; }
+      #test-suites { display: inline-block; width: 100%;margin-top:100px;}
+      #segment-bar { margin-top: 10px;margin-left: 14px;float:right;}
+      #segment-bar a:first-child { border-radius: 9px 0 0 9px; border-right: none;}
+      #segment-bar a:last-child { border-radius: 0 9px 9px 0; border-left: none;}
+      #segment-bar > a { color: #565656; border: 2px solid  #7B7B7B; width: 80px; font-weight: bold; display:inline-block;text-align:center; font-weight: normal;}
+      #segment-bar > a.selected { background-color: #979797; color: #F0F3FB;}
+      #counters { float: left;margin: 10px;text-align: right;}
+      #counters h2 { font-size: 16px; font-family: Avenir, sans-serif; font-weight: lighter; display:inline;}
+      #counters .number { font-size: 20px;}
+      #fail-count { color: #D0021B; margin-left:10px;}
+      @media (max-width: 640px) {
+        h1, #counters, #segment-bar { margin: 5px auto; text-align:center;}
+        header, #segment-bar { width: 100%; position: relative; background:none;}
+        .left, .right { float:none; margin:0;}
+        #test-suites { margin-top: 0;}
+        #counters { float:none;}
+      }
+    </style>
+    <script type="text/javascript">
+      var hide = function(element) { element.style.display = 'none';}
+      var show = function(element) { element.style.display = '';}
+      var isHidden = function(element) { return element.style.display == 'none';}
+      var isSelected = function(element) { return element.classList.contains("selected");}
+      var deselect = function(element) { return element.classList.remove("selected");}
+      var select = function(element) { return element.classList.add("selected");}
+      var toggle = function(element) { isHidden(element) ? show(element) : hide(element);};
+      var toggleTests = function(heading) { toggle(heading.parentNode.children[1]);};
+      var toggleDetails = function(detailClass) {
+        var details = document.querySelectorAll('.' + detailClass);
+        for (var i = details.length - 1; i >= 0; i--) { toggle(details[i]);};
+      };
+      var hideAll = function(collection) {
+        for (var i = collection.length - 1; i >= 0; i--) { hide(collection[i]); };
+      }
+      var showAll = function(collection) {
+        for (var i = collection.length - 1; i >= 0; i--) { show(collection[i]); };
+      }
+      var selectSegment = function(segment) {
+        if (isSelected(segment)) return;
+        var segments = document.querySelectorAll('#segment-bar > a');
+        for (var i = segments.length - 1; i >= 0; i--) { deselect(segments[i]);};
+        select(segment);
+        if (segment.id == "all-segment") {
+          showAll(document.querySelectorAll('.test-suite'));
+          showAll(document.querySelectorAll('.test'));
+        } else if (segment.id == "failing-segment") {
+          hideAll(document.querySelectorAll('.test.passing'));
+          showAll(document.querySelectorAll('.test.failing'));
+          hideAll(document.querySelectorAll('.test-suite.passing'));
+          showAll(document.querySelectorAll('.test-suite.failing'));
+        } else if (segment.id == "passing-segment") {
+          hideAll(document.querySelectorAll('.test.failing'));
+          showAll(document.querySelectorAll('.test.passing'));
+          hideAll(document.querySelectorAll('.test-suite.failing'));
+          showAll(document.querySelectorAll('.test-suite.passing'));
+        }
+      }
+      var toggleScreenshot = function(suiteName, index) {
+        var screenshot = document.getElementById("screenshot-" + suiteName + "-" + index);
+        isSelected(screenshot) ? deselect(screenshot) : select(screenshot);
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <section class="left">
+        <h1>Test Results</h1>
+      </section>
+      <section class="right">
+        <section id="counters">
+          <h2 id="test-count"><span class="number">220</span> tests</h2>
+          
+        </section>
+        <section id="segment-bar">
+          <a id="all-segment" onclick="selectSegment(this);" class="selected">All</a><a id="failing-segment" onclick="selectSegment(this);">Failing</a><a id="passing-segment" onclick="selectSegment(this);">Passing</a>
+        </section>
+      </section>
+    </header>
+    <section id="test-suites">
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.AssetQueryAPITest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.AssetQueryAPITest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test01FindAll_AssetQuery');">
+                <td>
+                  
+                    <h3 class="time">1.939s</h3>
+                  
+                </td>
+                <td><h3 class="title">test01FindAll_AssetQuery</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test02Find_AssetQuery_whereUIDEquals');">
+                <td>
+                  
+                    <h3 class="time">0.018s</h3>
+                  
+                </td>
+                <td><h3 class="title">test02Find_AssetQuery_whereUIDEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test03Find_AssetQuery_whereFileNameEquals');">
+                <td>
+                  
+                    <h3 class="time">0.022s</h3>
+                  
+                </td>
+                <td><h3 class="title">test03Find_AssetQuery_whereFileNameEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test03Find_AssetQuery_whereTitleDNotEquals');">
+                <td>
+                  
+                    <h3 class="time">0.020s</h3>
+                  
+                </td>
+                <td><h3 class="title">test03Find_AssetQuery_whereTitleDNotEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test04Find_AssetQuery_whereFileNameexists');">
+                <td>
+                  
+                    <h3 class="time">0.020s</h3>
+                  
+                </td>
+                <td><h3 class="title">test04Find_AssetQuery_whereFileNameexists</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test05Find_AssetQuery_whereTitleMatchRegex');">
+                <td>
+                  
+                    <h3 class="time">0.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">test05Find_AssetQuery_whereTitleMatchRegex</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test06Fetch_Asset_fromUID');">
+                <td>
+                  
+                    <h3 class="time">0.012s</h3>
+                  
+                </td>
+                <td><h3 class="title">test06Fetch_Asset_fromUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test07Fetch_AssetQuery_WithDimentsions');">
+                <td>
+                  
+                    <h3 class="time">0.023s</h3>
+                  
+                </td>
+                <td><h3 class="title">test07Fetch_AssetQuery_WithDimentsions</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test08Fetch_Asset_WithGlobalFields');">
+                <td>
+                  
+                    <h3 class="time">0.012s</h3>
+                  
+                </td>
+                <td><h3 class="title">test08Fetch_Asset_WithGlobalFields</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test09Fetch_AssetQuery_WithCount');">
+                <td>
+                  
+                    <h3 class="time">0.019s</h3>
+                  
+                </td>
+                <td><h3 class="title">test09Fetch_AssetQuery_WithCount</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test11Fetch_Asset_WithWrongUID_shouldFail');">
+                <td>
+                  
+                    <h3 class="time">0.191s</h3>
+                  
+                </td>
+                <td><h3 class="title">test11Fetch_Asset_WithWrongUID_shouldFail</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test12Fetch_AssetQuery_WithoutFallback_Result');">
+                <td>
+                  
+                    <h3 class="time">0.022s</h3>
+                  
+                </td>
+                <td><h3 class="title">test12Fetch_AssetQuery_WithoutFallback_Result</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test13Fetch_AssetQuery_Fallback_Result');">
+                <td>
+                  
+                    <h3 class="time">0.032s</h3>
+                  
+                </td>
+                <td><h3 class="title">test13Fetch_AssetQuery_Fallback_Result</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test14Fetch_Asset_UIDWithoutFallback_NoResult');">
+                <td>
+                  
+                    <h3 class="time">0.174s</h3>
+                  
+                </td>
+                <td><h3 class="title">test14Fetch_Asset_UIDWithoutFallback_NoResult</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test15Fetch_Asset_UIDWithFallback_NoResult');">
+                <td>
+                  
+                    <h3 class="time">0.025s</h3>
+                  
+                </td>
+                <td><h3 class="title">test15Fetch_Asset_UIDWithFallback_NoResult</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.AssetQueryTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.AssetQueryTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAssetQuery_addQueryParam');">
+                <td>
+                  
+                    <h3 class="time">0.004s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_addQueryParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testAssetQuery_addURIParam');">
+                <td>
+                  
+                    <h3 class="time">0.003s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_addURIParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAssetQuery_addValue');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_addValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testAssetQuery_Include');">
+                <td>
+                  
+                    <h3 class="time">0.003s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_Include</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAssetQuery_Locale');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_Locale</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testAssetQuery_Order');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_Order</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAssetQuery_SkipLimit');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_SkipLimit</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testAssetQuery_whereCondition');">
+                <td>
+                  
+                    <h3 class="time">0.008s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_whereCondition</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.AssetTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.AssetTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAsset_addValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAsset_addValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testAssetInclude');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetInclude</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAssetQuery_Locale');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_Locale</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testAssetQuery_withoutUID');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_withoutUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAssetQuery_withUID');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_withUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testEndPoint');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEndPoint</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.AsyncAssetQueryAPITest2">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.AsyncAssetQueryAPITest2</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test01FindAll_AssetQuery');">
+                <td>
+                  
+                    <h3 class="time">0.632s</h3>
+                  
+                </td>
+                <td><h3 class="title">test01FindAll_AssetQuery</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test02Find_AssetQuery_whereUIDEquals');">
+                <td>
+                  
+                    <h3 class="time">0.014s</h3>
+                  
+                </td>
+                <td><h3 class="title">test02Find_AssetQuery_whereUIDEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test03Find_AssetQuery_whereTitleDNotEquals');">
+                <td>
+                  
+                    <h3 class="time">0.018s</h3>
+                  
+                </td>
+                <td><h3 class="title">test03Find_AssetQuery_whereTitleDNotEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test04Find_AssetQuery_whereFileNameexists');">
+                <td>
+                  
+                    <h3 class="time">0.017s</h3>
+                  
+                </td>
+                <td><h3 class="title">test04Find_AssetQuery_whereFileNameexists</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test05Find_AssetQuery_whereTitleMatchRegex');">
+                <td>
+                  
+                    <h3 class="time">0.013s</h3>
+                  
+                </td>
+                <td><h3 class="title">test05Find_AssetQuery_whereTitleMatchRegex</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test06Fetch_Asset_fromUID');">
+                <td>
+                  
+                    <h3 class="time">0.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">test06Fetch_Asset_fromUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test07Fetch_AssetQuery_WithDimensions');">
+                <td>
+                  
+                    <h3 class="time">0.019s</h3>
+                  
+                </td>
+                <td><h3 class="title">test07Fetch_AssetQuery_WithDimensions</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test08Fetch_Asset_WithGlobalFields');">
+                <td>
+                  
+                    <h3 class="time">0.026s</h3>
+                  
+                </td>
+                <td><h3 class="title">test08Fetch_Asset_WithGlobalFields</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test09Fetch_AssetQuery_WithCount');">
+                <td>
+                  
+                    <h3 class="time">0.017s</h3>
+                  
+                </td>
+                <td><h3 class="title">test09Fetch_AssetQuery_WithCount</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test10Fetch_Asset_WithWrongUID_shouldFail');">
+                <td>
+                  
+                    <h3 class="time">0.178s</h3>
+                  
+                </td>
+                <td><h3 class="title">test10Fetch_Asset_WithWrongUID_shouldFail</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test11Fetch_AssetQuery_WithoutFallback_Result');">
+                <td>
+                  
+                    <h3 class="time">0.021s</h3>
+                  
+                </td>
+                <td><h3 class="title">test11Fetch_AssetQuery_WithoutFallback_Result</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test12Fetch_AssetQuery_Fallback_Result');">
+                <td>
+                  
+                    <h3 class="time">0.040s</h3>
+                  
+                </td>
+                <td><h3 class="title">test12Fetch_AssetQuery_Fallback_Result</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test13Fetch_Asset_UIDWithoutFallback_NoResult');">
+                <td>
+                  
+                    <h3 class="time">0.176s</h3>
+                  
+                </td>
+                <td><h3 class="title">test13Fetch_Asset_UIDWithoutFallback_NoResult</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test14Fetch_Asset_UIDWithFallback_NoResult');">
+                <td>
+                  
+                    <h3 class="time">0.020s</h3>
+                  
+                </td>
+                <td><h3 class="title">test14Fetch_Asset_UIDWithFallback_NoResult</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.AsyncContentTypeQueryAPITest2</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test01FindAll_ContentTypeQuery');">
+                <td>
+                  
+                    <h3 class="time">0.060s</h3>
+                  
+                </td>
+                <td><h3 class="title">test01FindAll_ContentTypeQuery</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test02Find_ContentTypeQuery_whereUIDEquals');">
+                <td>
+                  
+                    <h3 class="time">0.014s</h3>
+                  
+                </td>
+                <td><h3 class="title">test02Find_ContentTypeQuery_whereUIDEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test03Find_ContentTypeQuery_whereTitleDNotEquals');">
+                <td>
+                  
+                    <h3 class="time">0.036s</h3>
+                  
+                </td>
+                <td><h3 class="title">test03Find_ContentTypeQuery_whereTitleDNotEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test04Find_ContentTypeQuery_whereDescriptionexists');">
+                <td>
+                  
+                    <h3 class="time">0.031s</h3>
+                  
+                </td>
+                <td><h3 class="title">test04Find_ContentTypeQuery_whereDescriptionexists</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test05Find_ContentTypeQuery_whereTitleMatchRegex');">
+                <td>
+                  
+                    <h3 class="time">0.013s</h3>
+                  
+                </td>
+                <td><h3 class="title">test05Find_ContentTypeQuery_whereTitleMatchRegex</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test06Fetch_ContentType_fromUID');">
+                <td>
+                  
+                    <h3 class="time">0.012s</h3>
+                  
+                </td>
+                <td><h3 class="title">test06Fetch_ContentType_fromUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test07Fetch_ContentTypeQuery_WithGlobalFields');">
+                <td>
+                  
+                    <h3 class="time">0.032s</h3>
+                  
+                </td>
+                <td><h3 class="title">test07Fetch_ContentTypeQuery_WithGlobalFields</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test08Fetch_ContentType_WithGlobalFields');">
+                <td>
+                  
+                    <h3 class="time">0.012s</h3>
+                  
+                </td>
+                <td><h3 class="title">test08Fetch_ContentType_WithGlobalFields</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test09Fetch_ContentTypeQuery_WithCount');">
+                <td>
+                  
+                    <h3 class="time">0.033s</h3>
+                  
+                </td>
+                <td><h3 class="title">test09Fetch_ContentTypeQuery_WithCount</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test10Fetch_ContentType_WithWrongUID_shouldFail');">
+                <td>
+                  
+                    <h3 class="time">0.169s</h3>
+                  
+                </td>
+                <td><h3 class="title">test10Fetch_ContentType_WithWrongUID_shouldFail</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.AsyncEntryAPITest2">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.AsyncEntryAPITest2</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test01FindAll_EntryQuery');">
+                <td>
+                  
+                    <h3 class="time">0.081s</h3>
+                  
+                </td>
+                <td><h3 class="title">test01FindAll_EntryQuery</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test02Find_EntryQuery_whereUIDEquals');">
+                <td>
+                  
+                    <h3 class="time">0.020s</h3>
+                  
+                </td>
+                <td><h3 class="title">test02Find_EntryQuery_whereUIDEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test03Find_EntryQuery_whereTitleDNotEquals');">
+                <td>
+                  
+                    <h3 class="time">0.070s</h3>
+                  
+                </td>
+                <td><h3 class="title">test03Find_EntryQuery_whereTitleDNotEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test04Find_EntryQuery_whereTitleexists');">
+                <td>
+                  
+                    <h3 class="time">0.050s</h3>
+                  
+                </td>
+                <td><h3 class="title">test04Find_EntryQuery_whereTitleexists</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test05Find_EntryQuery_whereTitleMatchRegex');">
+                <td>
+                  
+                    <h3 class="time">0.024s</h3>
+                  
+                </td>
+                <td><h3 class="title">test05Find_EntryQuery_whereTitleMatchRegex</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test06Fetch_Entry_fromUID');">
+                <td>
+                  
+                    <h3 class="time">0.012s</h3>
+                  
+                </td>
+                <td><h3 class="title">test06Fetch_Entry_fromUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test07Fetch_EntryQuery_WithIncludeContentType');">
+                <td>
+                  
+                    <h3 class="time">0.048s</h3>
+                  
+                </td>
+                <td><h3 class="title">test07Fetch_EntryQuery_WithIncludeContentType</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test08Fetch_Entry_WithGlobalFields');">
+                <td>
+                  
+                    <h3 class="time">0.016s</h3>
+                  
+                </td>
+                <td><h3 class="title">test08Fetch_Entry_WithGlobalFields</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test09Fetch_EntryQuery_WithCount');">
+                <td>
+                  
+                    <h3 class="time">0.051s</h3>
+                  
+                </td>
+                <td><h3 class="title">test09Fetch_EntryQuery_WithCount</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test10Fetch_Entry_WithIncludeContentType');">
+                <td>
+                  
+                    <h3 class="time">0.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">test10Fetch_Entry_WithIncludeContentType</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test11Fetch_Entry_WithWrongUID_shouldFail');">
+                <td>
+                  
+                    <h3 class="time">0.172s</h3>
+                  
+                </td>
+                <td><h3 class="title">test11Fetch_Entry_WithWrongUID_shouldFail</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test12Fetch_EntryQuery_WithGlobalFields');">
+                <td>
+                  
+                    <h3 class="time">0.101s</h3>
+                  
+                </td>
+                <td><h3 class="title">test12Fetch_EntryQuery_WithGlobalFields</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test13Find_EntryQuery_whereTitleIncludes');">
+                <td>
+                  
+                    <h3 class="time">0.014s</h3>
+                  
+                </td>
+                <td><h3 class="title">test13Find_EntryQuery_whereTitleIncludes</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test14Find_EntryQuery_whereTitleExclude');">
+                <td>
+                  
+                    <h3 class="time">0.048s</h3>
+                  
+                </td>
+                <td><h3 class="title">test14Find_EntryQuery_whereTitleExclude</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test15Find_EntryQuery_wherelessThan');">
+                <td>
+                  
+                    <h3 class="time">0.055s</h3>
+                  
+                </td>
+                <td><h3 class="title">test15Find_EntryQuery_wherelessThan</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test19Find_EntryQuery_OrderBySessionTime');">
+                <td>
+                  
+                    <h3 class="time">0.105s</h3>
+                  
+                </td>
+                <td><h3 class="title">test19Find_EntryQuery_OrderBySessionTime</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test20Find_EntryQuery_AndOrOperator');">
+                <td>
+                  
+                    <h3 class="time">0.115s</h3>
+                  
+                </td>
+                <td><h3 class="title">test20Find_EntryQuery_AndOrOperator</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test21Find_EntryQuery_SkipLimit');">
+                <td>
+                  
+                    <h3 class="time">0.057s</h3>
+                  
+                </td>
+                <td><h3 class="title">test21Find_EntryQuery_SkipLimit</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test22Find_EntryQuery_AddQuery');">
+                <td>
+                  
+                    <h3 class="time">0.050s</h3>
+                  
+                </td>
+                <td><h3 class="title">test22Find_EntryQuery_AddQuery</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test23Find_EntryQuery_AddParam');">
+                <td>
+                  
+                    <h3 class="time">0.092s</h3>
+                  
+                </td>
+                <td><h3 class="title">test23Find_EntryQuery_AddParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test24Find_EntryQuery_IncludeOnlyFields');">
+                <td>
+                  
+                    <h3 class="time">0.020s</h3>
+                  
+                </td>
+                <td><h3 class="title">test24Find_EntryQuery_IncludeOnlyFields</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test25Find_EntryQuery_ExcludeFields');">
+                <td>
+                  
+                    <h3 class="time">0.049s</h3>
+                  
+                </td>
+                <td><h3 class="title">test25Find_EntryQuery_ExcludeFields</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test26Find_EntryQuery_IncludeReference');">
+                <td>
+                  
+                    <h3 class="time">0.057s</h3>
+                  
+                </td>
+                <td><h3 class="title">test26Find_EntryQuery_IncludeReference</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test27Fetch_Entry_IncludeReference');">
+                <td>
+                  
+                    <h3 class="time">0.020s</h3>
+                  
+                </td>
+                <td><h3 class="title">test27Fetch_Entry_IncludeReference</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test28Find_EntryQuery_IncludeReferenceOnly');">
+                <td>
+                  
+                    <h3 class="time">0.047s</h3>
+                  
+                </td>
+                <td><h3 class="title">test28Find_EntryQuery_IncludeReferenceOnly</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test29Fetch_Entry_IncludeReferenceOnly');">
+                <td>
+                  
+                    <h3 class="time">0.013s</h3>
+                  
+                </td>
+                <td><h3 class="title">test29Fetch_Entry_IncludeReferenceOnly</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test30Find_EntryQuery_IncludeReferenceExceot');">
+                <td>
+                  
+                    <h3 class="time">0.051s</h3>
+                  
+                </td>
+                <td><h3 class="title">test30Find_EntryQuery_IncludeReferenceExceot</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test31Fetch_Entry_IncludeReferenceExcept');">
+                <td>
+                  
+                    <h3 class="time">0.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">test31Fetch_Entry_IncludeReferenceExcept</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test32Fetch_EntryQuery_WithoutFallback_Result');">
+                <td>
+                  
+                    <h3 class="time">0.010s</h3>
+                  
+                </td>
+                <td><h3 class="title">test32Fetch_EntryQuery_WithoutFallback_Result</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test33Fetch_EntryQuery_Fallback_Result');">
+                <td>
+                  
+                    <h3 class="time">0.046s</h3>
+                  
+                </td>
+                <td><h3 class="title">test33Fetch_EntryQuery_Fallback_Result</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test34Fetch_Entry_UIDWithoutFallback_NoResult');">
+                <td>
+                  
+                    <h3 class="time">0.184s</h3>
+                  
+                </td>
+                <td><h3 class="title">test34Fetch_Entry_UIDWithoutFallback_NoResult</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test35Fetch_Entry_UIDWithFallback_NoResult');">
+                <td>
+                  
+                    <h3 class="time">0.021s</h3>
+                  
+                </td>
+                <td><h3 class="title">test35Fetch_Entry_UIDWithFallback_NoResult</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.AsyncQueryOnAPITest2">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.AsyncQueryOnAPITest2</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test01FindAll_Session');">
+                <td>
+                  
+                    <h3 class="time">0.075s</h3>
+                  
+                </td>
+                <td><h3 class="title">test01FindAll_Session</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test02FindAll_SessionReference');">
+                <td>
+                  
+                    <h3 class="time">0.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">test02FindAll_SessionReference</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.AsyncSyncAPITest2">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.AsyncSyncAPITest2</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test01SyncInit');">
+                <td>
+                  
+                    <h3 class="time">0.123s</h3>
+                  
+                </td>
+                <td><h3 class="title">test01SyncInit</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test02SyncToken');">
+                <td>
+                  
+                    <h3 class="time">0.011s</h3>
+                  
+                </td>
+                <td><h3 class="title">test02SyncToken</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test03SyncPagination');">
+                <td>
+                  
+                    <h3 class="time">0.025s</h3>
+                  
+                </td>
+                <td><h3 class="title">test03SyncPagination</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test04SyncAssetPublished');">
+                <td>
+                  
+                    <h3 class="time">0.016s</h3>
+                  
+                </td>
+                <td><h3 class="title">test04SyncAssetPublished</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test05SyncForContentType');">
+                <td>
+                  
+                    <h3 class="time">0.032s</h3>
+                  
+                </td>
+                <td><h3 class="title">test05SyncForContentType</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test06SyncLocale');">
+                <td>
+                  
+                    <h3 class="time">0.011s</h3>
+                  
+                </td>
+                <td><h3 class="title">test06SyncLocale</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test07SyncFromStartDate');">
+                <td>
+                  
+                    <h3 class="time">0.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">test07SyncFromStartDate</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test08SyncContentTypeAndLocale');">
+                <td>
+                  
+                    <h3 class="time">0.032s</h3>
+                  
+                </td>
+                <td><h3 class="title">test08SyncContentTypeAndLocale</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.ContentStackLogTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.ContentStackLogTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testContentstackLogsLevels');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContentstackLogsLevels</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testContentstackPrint');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContentstackPrint</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.ContentTypeQueryAPITest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.ContentTypeQueryAPITest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test01FindAll_ContentTypeQuery');">
+                <td>
+                  
+                    <h3 class="time">0.075s</h3>
+                  
+                </td>
+                <td><h3 class="title">test01FindAll_ContentTypeQuery</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test02Find_ContentTypeQuery_whereUIDEquals');">
+                <td>
+                  
+                    <h3 class="time">0.012s</h3>
+                  
+                </td>
+                <td><h3 class="title">test02Find_ContentTypeQuery_whereUIDEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test03Find_ContentTypeQuery_whereTitleDNotEquals');">
+                <td>
+                  
+                    <h3 class="time">0.025s</h3>
+                  
+                </td>
+                <td><h3 class="title">test03Find_ContentTypeQuery_whereTitleDNotEquals</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test04Find_ContentTypeQuery_whereDescriptionexists');">
+                <td>
+                  
+                    <h3 class="time">0.040s</h3>
+                  
+                </td>
+                <td><h3 class="title">test04Find_ContentTypeQuery_whereDescriptionexists</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test05Find_ContentTypeQuery_whereTitleMatchRegex');">
+                <td>
+                  
+                    <h3 class="time">0.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">test05Find_ContentTypeQuery_whereTitleMatchRegex</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test06Fetch_ContentType_fromUID');">
+                <td>
+                  
+                    <h3 class="time">0.012s</h3>
+                  
+                </td>
+                <td><h3 class="title">test06Fetch_ContentType_fromUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test07Fetch_ContentTypeQuery_WithGlobalFields');">
+                <td>
+                  
+                    <h3 class="time">0.031s</h3>
+                  
+                </td>
+                <td><h3 class="title">test07Fetch_ContentTypeQuery_WithGlobalFields</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test08Fetch_ContentType_WithGlobalFields');">
+                <td>
+                  
+                    <h3 class="time">0.012s</h3>
+                  
+                </td>
+                <td><h3 class="title">test08Fetch_ContentType_WithGlobalFields</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test09Fetch_ContentTypeQuery_WithCount');">
+                <td>
+                  
+                    <h3 class="time">0.030s</h3>
+                  
+                </td>
+                <td><h3 class="title">test09Fetch_ContentTypeQuery_WithCount</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test11Fetch_ContentType_WithWrongUID_shouldFail');">
+                <td>
+                  
+                    <h3 class="time">0.164s</h3>
+                  
+                </td>
+                <td><h3 class="title">test11Fetch_ContentType_WithWrongUID_shouldFail</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.ContentTypeQueryTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.ContentTypeQueryTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAssetQuery_addValue');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_addValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCTQuery_addQueryParam');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_addQueryParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCTQuery_addURIParam');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_addURIParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCTQuery_Include');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_Include</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCTQuery_Order');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_Order</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCTQuery_SkipLimit');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_SkipLimit</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCTQuery_whereCondition');">
+                <td>
+                  
+                    <h3 class="time">0.006s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_whereCondition</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.ContentTypeTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.ContentTypeTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testContentTyp_addValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContentTyp_addValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testContentTypeQuery');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContentTypeQuery</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testContentTypeQuery_withContentTypeUID');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContentTypeQuery_withContentTypeUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testEndPoint');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEndPoint</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testEntry_ContentTypeUidNotProvided_FatalError');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntry_ContentTypeUidNotProvided_FatalError</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testEntry_UidNotProvided_ShouldReturnEntry');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntry_UidNotProvided_ShouldReturnEntry</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testEntry_UidProvided_ShouldReturnEntryWithUID');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntry_UidProvided_ShouldReturnEntryWithUID</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.ContentstackConfigTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.ContentstackConfigTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testTimeZone_changetoCurrent');">
+                <td>
+                  
+                    <h3 class="time">0.010s</h3>
+                  
+                </td>
+                <td><h3 class="title">testTimeZone_changetoCurrent</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testUserAgent');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUserAgent</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testXUserAgent');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testXUserAgent</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.ContentstackTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.ContentstackTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testStack_AZURE_NAHostRegion_ReturnStackWithEUValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStack_AZURE_NAHostRegion_ReturnStackWithEUValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testStack_Branch_ReturnStackWithBranch');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStack_Branch_ReturnStackWithBranch</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testStack_DecodingStrategy_tobesetToJsonDecoder');">
+                <td>
+                  
+                    <h3 class="time">0.005s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStack_DecodingStrategy_tobesetToJsonDecoder</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testStack_DefaultHostRegion_ReturnStackWithDefaultValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStack_DefaultHostRegion_ReturnStackWithDefaultValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testStack_EUHostRegion_ReturnStackWithEUValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStack_EUHostRegion_ReturnStackWithEUValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testStack_NewHost_ReturnStackWithNewHost');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStack_NewHost_ReturnStackWithNewHost</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testStackToken_RequireFieldProvided_ReturnStack');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStackToken_RequireFieldProvided_ReturnStack</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.DateTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.DateTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testDateFormatter_withMultipleDateFormat');">
+                <td>
+                  
+                    <h3 class="time">0.007s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDateFormatter_withMultipleDateFormat</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testDatefromString_ReturnDate');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDatefromString_ReturnDate</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.EntryQueriableTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.EntryQueriableTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCTQuery_Include');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_Include</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testQuery_IncludeReference');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_IncludeReference</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testQuery_includeReferenceFieldBoth');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_includeReferenceFieldBoth</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testQuery_includeReferenceFieldExcept');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_includeReferenceFieldExcept</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testQuery_includeReferenceFieldOnly');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_includeReferenceFieldOnly</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testQuery_OnlyAndExcept');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_OnlyAndExcept</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.EntryTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.EntryTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testContentTyp_addValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContentTyp_addValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testEntry_EndPoint');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntry_EndPoint</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testEntryLocale');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntryLocale</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testEntryQuery_ContentTypeUidNotProvided_FatalError');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntryQuery_ContentTypeUidNotProvided_FatalError</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testEntryQuery_withoutUID');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntryQuery_withoutUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testEntryQuery_withUID');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntryQuery_withUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testEntryQueryType_withoutUID');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntryQueryType_withoutUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testEntryQueryType_withUID');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntryQueryType_withUID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testEntryQueryTyped_ContentTypeUidNotProvided_FatalError');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testEntryQueryTyped_ContentTypeUidNotProvided_FatalError</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.ImageTransformEquatableTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.ImageTransformEquatableTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testImageTransform_Equatable');">
+                <td>
+                  
+                    <h3 class="time">0.004s</h3>
+                  
+                </td>
+                <td><h3 class="title">testImageTransform_Equatable</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testImageTransform_Equatables');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testImageTransform_Equatables</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testResizeFilter');">
+                <td>
+                  
+                    <h3 class="time">0.004s</h3>
+                  
+                </td>
+                <td><h3 class="title">testResizeFilter</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSharpen_invalidParams_shouldThrowError');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSharpen_invalidParams_shouldThrowError</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSharpen_validParameter');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSharpen_validParameter</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.ImageTransformTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.ImageTransformTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAuto');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAuto</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCrop_Offset_withoutMode');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCrop_Offset_withoutMode</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCrop_Region_withoutMode');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCrop_Region_withoutMode</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCropAspectRatio_withoutMode');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCropAspectRatio_withoutMode</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCropCanvas_Offset');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCropCanvas_Offset</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCropCanvas_Region');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCropCanvas_Region</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCropCanvasAspectRatio_AllValues');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCropCanvasAspectRatio_AllValues</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCropCanvasAspectRatio_NoSizeSpecified_Throws');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCropCanvasAspectRatio_NoSizeSpecified_Throws</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCropCanvasDefault_ReturnURL');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCropCanvasDefault_ReturnURL</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testFit');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFit</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testFormat_ReturnURL');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFormat_ReturnURL</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testOrient');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testOrient</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testQualiity_InRange_ReturnURL');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQualiity_InRange_ReturnURL</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testQualiity_OutofRange_ThrowsError');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQualiity_OutofRange_ThrowsError</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testResize_ReturnURL');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testResize_ReturnURL</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testTrim');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testTrim</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.ImageTransformTestAdditional">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.ImageTransformTestAdditional</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testBackgroundColor_URLQueryParam');">
+                <td>
+                  
+                    <h3 class="time">0.003s</h3>
+                  
+                </td>
+                <td><h3 class="title">testBackgroundColor_URLQueryParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testBackgroundColorHex_withInvalidValues_shouldThrowError');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testBackgroundColorHex_withInvalidValues_shouldThrowError</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testBackgroundColorRGB_withInvalidValues_shouldThrowError');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testBackgroundColorRGB_withInvalidValues_shouldThrowError</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testBackgroundColorRGBA_withInvalidValues_shouldThrowError');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testBackgroundColorRGBA_withInvalidValues_shouldThrowError</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testBlur_InvalidParam_shouldThrow');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testBlur_InvalidParam_shouldThrow</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testBlur_validParam');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testBlur_validParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testBrightness_InvalidParam_shouldThrow');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testBrightness_InvalidParam_shouldThrow</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testBrightness_validParam');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testBrightness_validParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testContrast_InvalidParam_shouldThrow');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContrast_InvalidParam_shouldThrow</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testContrast_validParam');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContrast_validParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testDPR_InvalidParam_shouldThrow');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDPR_InvalidParam_shouldThrow</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testDPR_validParam');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDPR_validParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testFetchFirstFrame');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFetchFirstFrame</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testOverlay');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testOverlay</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testOverlayAlign');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testOverlayAlign</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testOverlayPadding');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testOverlayPadding</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testOverlayRepeat');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testOverlayRepeat</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testPadding');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testPadding</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSaturation_InvalidParam_shouldThrow');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaturation_InvalidParam_shouldThrow</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSaturation_validParam');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaturation_validParam</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.QueryEntryType">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.QueryEntryType</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCTQuery_whereCondition');">
+                <td>
+                  
+                    <h3 class="time">0.006s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_whereCondition</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testQuery_OrderBy');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_OrderBy</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.QueryTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.QueryTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAssetQuery_addValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAssetQuery_addValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCTQuery_addQueryParam');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_addQueryParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCTQuery_addURIParam');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_addURIParam</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCTQuery_Include');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_Include</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCTQuery_Order');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_Order</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCTQuery_SkipLimit');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_SkipLimit</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCTQuery_whereCondition');">
+                <td>
+                  
+                    <h3 class="time">0.007s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCTQuery_whereCondition</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testQuery_andOrOperator');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_andOrOperator</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testQuery_IncludeReference');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_IncludeReference</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testQuery_includeReferenceFieldBoth');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_includeReferenceFieldBoth</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testQuery_includeReferenceFieldExcept');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_includeReferenceFieldExcept</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testQuery_includeReferenceFieldOnly');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_includeReferenceFieldOnly</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testQuery_OnlyAndExcept');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_OnlyAndExcept</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testQuery_OrderBy');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_OrderBy</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testQuery_ReferenceSearch');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_ReferenceSearch</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testQuery_seachTag');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testQuery_seachTag</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.StackTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.StackTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAsset_UIDNotProvided_UIDShouldbeNil');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAsset_UIDNotProvided_UIDShouldbeNil</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testAsset_UIDProvided_UIDShouldPresent');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAsset_UIDProvided_UIDShouldPresent</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testContentType_UIDNotProvided_UIDShouldbeNil');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContentType_UIDNotProvided_UIDShouldbeNil</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testContentType_UIDProvided_UIDShouldPresent');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContentType_UIDProvided_UIDShouldPresent</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.SyncTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.SyncTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSync_BothTokens_ShouldGetFatalError');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSync_BothTokens_ShouldGetFatalError</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSyncableTypes_Parameter');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSyncableTypes_Parameter</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="Contentstack_iOS_Tests.UtilsTest">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">Contentstack_iOS_Tests.UtilsTest</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testArray_toString');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testArray_toString</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testDictionary_QueryParams_toString');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDictionary_QueryParams_toString</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testStringToURL_InvalidURL_throws');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStringToURL_InvalidURL_throws</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testStringToURL_URL_ReturnURL');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStringToURL_URL_ReturnURL</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testStringURL_BlankTransform_ReturnURL');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStringURL_BlankTransform_ReturnURL</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testStringURL_SameTransform_ReturnURL');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStringURL_SameTransform_ReturnURL</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testStringURL_SameTwoTransform_Throws');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStringURL_SameTwoTransform_Throws</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+    </section>
+    <footer>Report generated with <a href="https://github.com/supermarin/xcpretty">xcpretty</a></footer>
+  </body>
+</html>
